@@ -1,0 +1,66 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int color[100]={0};//初始化 
+int c[100][100];//存储n个顶点的无向图的数组
+bool ok(int k)//判断顶点k的着色是否发生冲突
+{
+    int i,j;
+    for(i=1;i<k;i++)
+        if(c[k][i]==1&&color[i]==color[k])
+            return false;
+        return true;
+}
+
+void graphcolor(int n,int m)
+{
+    int i,k;
+    int num=1;
+    k=1;
+    while(k>=1)
+    {
+        color[k]=color[k]+1;
+        while(color[k]<=m)
+            if (ok(k)) break;
+            else color[k]=color[k]+1;//搜索下一个颜色
+
+        if(color[k]<=m&&k==n)//求解完毕，输出解
+            {
+            	cout<<"第"<<num<<"种"<<endl;//记录填色的数量
+                for(i=1;i<=n;i++)
+                    printf("%d ",color[i]);
+                printf("\n");
+                num++;
+            }
+            else if(color[k]<=m&&k<n)
+                k=k+1;    //处理下一个顶点
+            else
+            {
+                color[k]=0;
+                k=k-1;//回溯
+            }         
+    }
+    if(num==1)cout<<"NO\n";
+}
+
+
+int main()
+{
+    int i,j,n,m;
+    scanf("%d %d",&n,&m);//N表示有几个点，M表示有几种颜色 
+    for(int i=1;i<=n;i++)
+        for(int j=1;j<=n;j++)
+            scanf("%d",&c[i][j]);
+    graphcolor(n,m);
+}
+/*0 1 1 1 0
+1 0 1 1 1
+1 1 0 1 0
+1 1 1 0 1
+0 1 0 1 0*/
+/*0 1 1 0 0
+1 0 0 1 1
+1 0 0 0 0
+0 1 0 0 0
+0 1 1 0 0*/
